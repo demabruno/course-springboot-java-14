@@ -2,10 +2,18 @@ package br.com.brunodemartini.course.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity //Declara a classe como entiade.
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	@Id //Declara o atributo como sendo a PK.
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //Define atributo como auto incremento
 	private Long id;
 	private String name;
 	private String email;
