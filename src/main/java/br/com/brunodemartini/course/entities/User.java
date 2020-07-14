@@ -1,13 +1,22 @@
 package br.com.brunodemartini.course.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.web.bind.annotation.Mapping;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity //Declara a classe como entiade.
+@Table(name = "tb_user")
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -20,6 +29,20 @@ public class User implements Serializable{
 	private String phone;
 	private String password;
 	
+	//*@OneToMany(mappedBy = "client") --> Mapeia o nome do atributo ao qual referecia na tabela Order
+	/*
+	 * @JsonIgnore --> Evita que, quando serializado pelo Jackson, do Postmann, o Springboot fique em 
+	 *                 loop infinito enviando dados a serem serializados para mostrar no browser. 
+	 *                 Dessa forma, usando a tag @JsonIgnore o java entende que quando carregado os dados
+	 *                 de um pedido (Order) serão exibidos os dados do cliente que o solicitou. No entanto,
+	 *                 se solicitar os dados do usuário não mostrará os pedidos associados a esse cliente.
+	 *                 Se não usar essa tag fica um loop infinito de exibição de dadosp por causa do relacionamento
+	 *                 entre as tabelas Order e User.
+	 */
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders;
+	
 	public User() {}
 
 	public User(Long id, String name, String email, String phone, String password) {
@@ -30,6 +53,10 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -100,5 +127,4 @@ public class User implements Serializable{
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", password=" + password
 				+ "]";
 	}
-
 }
