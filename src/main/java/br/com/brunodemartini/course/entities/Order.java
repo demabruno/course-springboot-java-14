@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
+import br.com.brunodemartini.course.enums.EnumOrderStatus;
+
 @Entity                   // Marca classe como sendo uma entidade. Dessa forma, o JPA cria a tabela n BD.
 @Table(name = "tb_order") // Define o nome da classe que será criada no BD.
 public class Order implements Serializable{
@@ -36,16 +38,20 @@ public class Order implements Serializable{
 	@JoinColumn(name = "client_id") //Dá o nome ao atributo que será a FK da tabela.
 	private User client;
 	
+	//Marca o atributo como Integer para o banco de dados entender que está sendo gravado um Integer
+	private Integer orderStatus;
+	
 	@OneToOne
 	@JoinColumn(name  = "payment_id") //???
 	private Payment paymment;
 	
 	public Order() {}
 
-	public Order(Long id, Instant date, User client) {
+	public Order(Long id, Instant date, EnumOrderStatus orderStatus, User client) {
 		this.id = id;
 		this.date = date;
 		this.client = client;
+		setOrderStatus(orderStatus);
 	}
 
 	public Long getId() {
@@ -58,6 +64,14 @@ public class Order implements Serializable{
 
 	public Instant getDate() {
 		return date;
+	}
+
+	public EnumOrderStatus getOrderStatus() {
+		return EnumOrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(EnumOrderStatus eOS) {
+		this.orderStatus = eOS.getCode();
 	}
 
 	public void setDate(Instant date) {
