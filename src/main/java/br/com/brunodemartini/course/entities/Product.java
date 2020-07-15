@@ -1,12 +1,16 @@
 package br.com.brunodemartini.course.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,8 +27,17 @@ public class Product implements Serializable{
 	private Double price;
 	private String imgUrl;
 	
-	@OneToOne
-	private Category category;
+	@ManyToMany
+	@JoinTable(name = "tb_products_categories", 
+	           joinColumns = @JoinColumn(name = "product_id"),
+	           inverseJoinColumns = @JoinColumn(name = "category_id"))
+	/*
+	 * Com o annotation @JoinTable o que é feito?
+	 *     É criado uma tabela intermediária entre produtos e categorias chamada products_categories.
+	 *     Ela terá como chaves os campos product_id e category_id
+	 *     Foi usada para separar o relacionamento de muitos para muitos de ambas as tabelas.
+	 */
+	private Set<Category> categories = new HashSet<>();
 	
 	public Product() {}
 
@@ -34,6 +47,14 @@ public class Product implements Serializable{
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
+	}
+
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
 	}
 
 	public Long getId() {
