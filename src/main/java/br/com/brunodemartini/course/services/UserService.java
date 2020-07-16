@@ -24,6 +24,7 @@ import br.com.brunodemartini.course.resources.UserResource;
  * A diferença entre as @'s acima é a semântica. Para cada tipo de componente há uma @ que é indicada. 
  *      Como essa é uma classe de serviço, a melhor @ para usar é a @Service
  */
+import br.com.brunodemartini.course.services.exception.ResourceNotFoundException;
 
 /*
  * Logo, essa é uma classe do tipo Service Layer (camada S), do MVC. Ela fará interface entre a classe Controller,
@@ -45,7 +46,7 @@ public class UserService {
 		
 		//Optional é um campo Opcional? Existe desde o Java 8.
 		Optional<User> optionalUser =  userRepository.findById(id);
-		return optionalUser.get();
+		return optionalUser.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User user) {
