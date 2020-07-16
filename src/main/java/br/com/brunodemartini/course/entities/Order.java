@@ -2,6 +2,8 @@ package br.com.brunodemartini.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,12 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 import br.com.brunodemartini.course.enums.EnumOrderStatus;
 
@@ -40,6 +41,9 @@ public class Order implements Serializable{
 	
 	//Marca o atributo como Integer para o banco de dados entender que está sendo gravado um Integer
 	private Integer orderStatus;
+	
+	@OneToMany(mappedBy = "id.order")//Esse mapeamento diz que está se relacionand com o id da entidade Order
+	private Set<OrderItem> items = new HashSet<>();
 	
 	@OneToOne
 	@JoinColumn(name  = "payment_id") //???
@@ -84,6 +88,10 @@ public class Order implements Serializable{
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Set<OrderItem> getItems(){
+		return items;
 	}
 
 	@Override
