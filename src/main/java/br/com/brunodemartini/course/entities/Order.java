@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,8 +46,7 @@ public class Order implements Serializable{
 	@OneToMany(mappedBy = "id.order")//Esse mapeamento diz que está se relacionand com o id da entidade Order
 	private Set<OrderItem> items = new HashSet<>();
 	
-	@OneToOne
-	@JoinColumn(name  = "payment_id") //???
+	@OneToOne(mappedBy  = "order", cascade = CascadeType.ALL)
 	private Payment paymment;
 	
 	public Order() {}
@@ -94,6 +94,14 @@ public class Order implements Serializable{
 		return items;
 	}
 
+	public Payment getPayment() {
+		return paymment;
+	}
+
+	public void setPayent(Payment paymment) {
+		this.paymment = paymment;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

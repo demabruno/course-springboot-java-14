@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,13 +23,15 @@ public class Payment implements Serializable{
 	private Instant date;
 	
 	@OneToOne
+	@MapsId
 	private Order order;
 	
 	public Payment() {}
 
-	public Payment(Long id, Instant date) {
+	public Payment(Long id, Instant date, Order order) {
 		this.id = id;
 		this.date = date;
+		this.order = order;
 	}
 
 	public Order getOrder() {
