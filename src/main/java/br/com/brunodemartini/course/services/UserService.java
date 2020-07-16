@@ -47,4 +47,28 @@ public class UserService {
 		Optional<User> optionalUser =  userRepository.findById(id);
 		return optionalUser.get();
 	}
+	
+	public User insert(User user) {
+		return userRepository.save(user); //Já retorna por defaul o metodo inserido
+	}
+	
+	public void delete(Long id) {
+		userRepository.deleteById(id);
+	}
+	
+	public User update(Long id, User obj) {
+		/*
+		 * Por que usar o getOne() e não o findById()? Porque o getOne() deixa os objetos sendo 
+		 *         monitorados de forma contínua. É mais eficiente.
+		 */
+		User entity = userRepository.getOne(id);
+		updateData(entity, obj);
+		return userRepository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setEmail(obj.getEmail());
+		entity.setName(obj.getName());
+		entity.setPhone(obj.getPhone());
+	}
 }
